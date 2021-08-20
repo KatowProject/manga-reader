@@ -1,0 +1,24 @@
+{
+  "name": "komikindo-api",
+  "version": "1.0.0",
+  "description": "komik indo ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "manga-api"
+  ],
+  "author": "KatowProject",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "cheerio": "^1.0.0-rc.10",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "got": "^11.8.2",
+    "helmet": "^4.6.0",
+    "pdfkit": "^0.12.3",
+    "tough-cookie": "^4.0.0"
+  }
+}
