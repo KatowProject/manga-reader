@@ -121,11 +121,16 @@ router.get('/komik/:endpoint', async (req, res) => {
         manga.chapters = [];
         $('#chapter_list ul > li').each((i, e) => {
             const chapters = manga.chapters;
-            chapters.push({
-                title: $(e).find('.lchx').text(),
-                link: $(e).find('.lchx > a').attr('href'),
-                endpoint: $(e).find('.lchx > a').attr('href').replace('https://komikindo.id/', '')
-            });
+
+            const obj = {}
+            obj.title = $(e).find('.lchx').text();
+            obj.link = $(e).find('.lchx > a').attr('href');
+            obj.endpoint = $(e).find('.lchx > a').attr('href').replace('https://komikindo.id/', '');
+            obj.download = {
+                pdf: `http://posantai.bugs.today/komikindo/api/download/${obj.endpoint}`
+            };
+
+            chapters.push(obj);
         });
 
         res.send({ success: true, data: manga });

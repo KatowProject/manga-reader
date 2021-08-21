@@ -3,8 +3,7 @@ const tough = require('tough-cookie');
 const baseURL = 'https://komikindo.id/';
 const cookieJar = new tough.CookieJar();
 const PDFDocument = require('pdfkit');
-const fs = require('fs');
-const path = require('path');
+const getStream = require('get-stream');
 
 axios.defaults.baseURL = baseURL;
 axios.defaults.jar = cookieJar;
@@ -36,24 +35,25 @@ module.exports = {
             });
         }
     },
-    pdf: async (nameFile, array, res) => {
-        const doc = new PDFDocument({ buffersPages: true, autoFirstPage: false });
+    generatePDF: async (images) => {
+        try {
+            const doc = new PDFDocument({ autoFirstPage: false });
 
-        for (const image of array) {
-            if (image.endsWith(".gif")) continue;
-            const buffer = await require('got')(image).buffer();
-            const img = doc.openImage(buffer);
-            doc.addPage({ size: [img.width, img.height] });
-            doc.image(img, 0, 0);
-        };
+            for (const image of images) {
+                if (image.endsWith(".gif")) continue;
+                const buffer = await require('got')(image).buffer();
+                const img = doc.openImage(buffer);
+                doc.addPage({ size: [img.width, img.height] });
+                doc.image(img, 0, 0);
+            };
 
-        const buffers = [];
-        doc.on('data', buffers.push.bind(buffers));
-        doc.on('end', () => {
-            res.setHeader('Content-disposition', `attachment; filename=${nameFile}.pdf`);
-            res.setHeader('Content-type', 'application/pdf');
-            res.setHeader('Content-Length', doc.outputSync().length);
-            fs.createReadStream(`${nameFile}.pdf`).pipe(res);
-        })
+            doc.end();
+
+            const pdfStream = await getStream.buffer(doc);
+
+            return pdfStream;
+        } catch (error) {
+            return null;
+        }
     }
 };

@@ -17,6 +17,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-csp-header": "^5.0.0",
+    "get-stream": "^6.0.1",
     "got": "^11.8.2",
     "helmet": "^4.6.0",
     "pdfkit": "^0.12.3",

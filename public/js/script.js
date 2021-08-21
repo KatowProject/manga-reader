@@ -90,13 +90,13 @@ $('#manga-list').on('click', '.see-detail', function () {
 });
 
 function generateChapterList(array) {
-    const temp = []
+    const temp = [];
     array.forEach(function (a, i) {
         temp.push(`
             <tr>    
                 <td>${a.title}</td>
                 <td><a href="#${a.endpoint}" target="_blank"><button type="button" class="btn btn-dark btn-sm btn-block">Baca Komik</button></a></td>
-                <td><a href="#${a.endpoint}" target="_blank"><button type="button" class="btn btn-dark btn-sm btn-block"><i class="fa fa-download"></i></button></a></td>
+                <td><a href="#${a.download.pdf}"><button type="button" class="btn btn-dark btn-sm btn-block"><i class="fa fa-download"></i></button></a></td>
             </tr>
         `);
     });
@@ -105,7 +105,8 @@ function generateChapterList(array) {
 };
 
 function searchManga() {
-    var input = $('#search-input').val();
+    let input = $('#search-input').val();
+    input = input.split(' ').join('+');
     $('#manga-list').html('');
     $('#result-text').html('');
 
@@ -122,7 +123,7 @@ function searchManga() {
                             <div class="card-body">
                                 <h5 class="card-title">${value.title}</h5>
                                 <a href="#" class="btn btn-dark btn-sm btn-block see-detail" data-toggle="modal" data-endpoint=${value.link.endpoint} data-target="#exampleModal">Detail</a>
-                             </div>
+                            </div>
                     </div>
                 </div>
                 `);
