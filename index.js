@@ -5,7 +5,7 @@ const cors = require('cors');
 const { expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
 
 /* ============ */
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3006;
 const general = require('./routers/general');
 const link = require('./routers/chapter');
 const download = require('./routers/download');
@@ -26,12 +26,12 @@ const app = express();
 app.use(cors());
 app.use(helmet());
 app.use('/download', download);
-app.use('/api', general);
-app.use('/api/chapter', link);
+app.use('/', general);
+app.use('/chapter', link);
 app.use(express.static('public'));
 
 /* Status */
-app.use('/api', async (req, res) => {
+app.use('/', async (req, res) => {
     res.send({
         status: true,
         message: 'Komikindo',
