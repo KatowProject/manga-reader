@@ -2,6 +2,7 @@
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
+const { expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
 
 /* ============ */
 const PORT = process.env.PORT || 3000;
@@ -12,13 +13,22 @@ const download = require('./routers/download');
 const app = express();
 
 /* app */
+// app.use(expressCspHeader({
+//     directives: {
+//         'default-src': [SELF],
+//         'script-src': [SELF, INLINE, 'somehost.com'],
+//         'style-src': [SELF, 'mystyles.net'],
+//         'img-src': ['data:', 'images.com'],
+//         'worker-src': [NONE],
+//         'block-all-mixed-content': true
+//     }
+// }));
 app.use(cors());
 app.use(helmet());
-
 app.use('/download', download);
 app.use('/api', general);
 app.use('/api/chapter', link);
-app.use(express.static('./public'));
+app.use(express.static('public'));
 
 /* Status */
 app.use('/api', async (req, res) => {

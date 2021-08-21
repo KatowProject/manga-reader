@@ -106,7 +106,7 @@ router.get('/komik/:endpoint', async (req, res) => {
                 endpoint: $(e).attr('href').replace('https://komikindo.id/', '')
             });
         });
-        manga.tipe = $(info).find('span:nth-of-type(7)').text().split(': ')[1].trim();
+        manga.tipe = $(info).find('span:nth-of-type(7)').text().split(':')[1].trim();
         manga.genre = [];
         $('.infox').find('.genre-info > a').each((i, e) => {
             const genres = manga.genre;
@@ -130,6 +130,7 @@ router.get('/komik/:endpoint', async (req, res) => {
 
         res.send({ success: true, data: manga });
     } catch (error) {
+        console.log(error);
         res.send({ suceess: false, message: error.message });
     }
 });
