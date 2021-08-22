@@ -127,7 +127,7 @@ router.get('/komik/:endpoint', async (req, res) => {
             obj.link = $(e).find('.lchx > a').attr('href');
             obj.endpoint = $(e).find('.lchx > a').attr('href').replace('https://komikindo.id/', '');
             obj.download = {
-                pdf: `http://posantai.bugs.today/komikindo/api/download/${obj.endpoint}`
+                pdf: `http://205.185.113.50/komik/download/${obj.endpoint}`
             };
 
             chapters.push(obj);
