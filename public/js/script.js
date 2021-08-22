@@ -1,52 +1,90 @@
-getReader();
+/* Local Storage */
+const storage = window.localStorage;
+const db = {
+    get: function (key) {
+        return JSON.parse(storage.getItem(key));
+    },
+    set: function (key, value) {
+        storage.setItem(key, JSON.stringify(value));
+    },
+    remove: function (key) {
+        storage.removeItem(key);
+    }
+}
+
 
 /*Checking query paramter*/
-function getReader() {
-    const url = window.location.href;
-    const params = new URL(url);
-    if (params.hash.length > 0) {
-        console.log(window.location);
-        $('#mangas').html(`
+const url = window.location.href;
+const params = new URL(url);
+
+// if (params.hash == '#favorite') {
+//     // <div class="row mt-4 justify-content-center">
+//     //     <div class="col">
+//     //         <h1 class="text-center">Search Manga</h1>
+
+//     //         <div class="input-group mb-3">
+//     //             <input type="text" class="form-control" placeholder="Title...." id="search-input">
+//     //             <div class="input-group-append">
+//     //                 <button class="btn btn-outline-dark" type="button" id="button-search">Search</button>
+//     //             </div>
+//     //         </div>
+//     //     </div>
+//     // </div>
+//     $('#mangas').append(`
+//         <hr>
+//         <div class="row" id="result-text"></div>
+//         <div class="row" id="manga-list"></div>
+//     `);
+// };
+
+if (params.hash.length > 0) {
+    console.log(window.location);
+    $('#mangas').html(`
                 <div class="row mt-4 justify-content-center">
                     <h1> Tunggu sebentar ya! </h1>
                 </div>
             `);
 
-        const endpoint = params.hash.substr(1);
-        $.getJSON('http://localhost:3000/chapter/' + endpoint, function (result) {
-            const data = result.data;
+    const endpoint = params.hash.substr(1);
+    $.getJSON('http://localhost:3000/chapter/' + endpoint, function (result) {
+        const data = result.data;
 
-            const images = data.chapter_images.map(a => `<img src="${a}" class="img-fluid" alt="Responsive image">`);
-            const nav = data.chapter;
-            const next = nav.next ?
-                `<a href="#${nav.next}" target="_blank"><button type="button" class="btn btn-dark btn-lg btn-block" onClick="window.close();">Chapter Selanjutnya</button></a>`
-                : `<button type="button" class="btn btn-dark btn-lg btn-block" disabled>Chapter Selanjutnya</button>`;
-            const prev = nav.previous ?
-                `<a href="#${nav.previous}" target="_blank"><button type="button" class="btn btn-dark btn-lg btn-block" onClick="window.close();">Chapter Sebelumnya</button></a>`
-                : `<button type="button" class="btn btn-dark btn-lg btn-block" disabled>Chapter Sebelumnya</button>`;
+        document.title = `${data.chapter_name}`;
 
-            $('#mangas').html(`
+        const images = data.chapter_images.map(a => `<img src="${a}" class="img-fluid" alt="Responsive image">`);
+        const nav = data.chapter;
+        const next = nav.next ?
+            `<a href="#${nav.next}" class="btn btn-dark navv" target="_blank">Chapter Selanjutnya</a> `
+            : `<button type="button" class="btn btn-dark mx-1" disabled>Chapter Selanjutnya</button>`;
+        const prev = nav.previous ?
+            `<a href="#${nav.previous}" class="btn btn-dark mx-1 navv" target="_blank">Chapter Sebelumnya</a>`
+            : `<button type="button" class="btn btn-dark mx-1" disabled>Chapter Sebelumnya</button>`;
+
+
+        $('#mangas').html(`
+                <div class="row mt-4 justify-content-center">
+                    <p class="text-center"><h1>${data.chapter_name}</h1></p>
+                </div>
+
                 <div class="row mt-4 justify-content-center">
                     ${images.join('\n')}
                 </div>
                 <hr>
                 <div class="row mt-4">
                     <div class="col-sm-12">
-                        <div class="row">
-                            <div class="col-8 col-sm-6">
-                                ${prev}
-                            </div>
-                            <div class="col-4 col-sm-6">
-                                ${next}
+                        <div class="row flex justify-content-center">
+                            <div class="btn-group btn-group-toggle btn-group-lg btn-block mx-1">
+                                    ${prev}
+                                    ${next}
                             </div>
                         </div>
                     </div>
                 </div>
                 <hr>
             `);
-        });
-    } else {
-        $('#mangas').append(`
+    });
+} else {
+    $('#mangas').append(`
         <div class="row mt-4 justify-content-center">
             <div class="col">
                 <h1 class="text-center">Search Manga</h1>
@@ -63,9 +101,13 @@ function getReader() {
         <hr>
         <div class="row" id="result-text"></div>
         <div class="row" id="manga-list"></div>
-        `);
-    }
+    `);
 }
+
+
+$('#mangas').on('click', '.navv', function (e) {
+    window.close();
+});
 
 $('#button-search').on('click', function () {
     searchManga();
@@ -78,7 +120,16 @@ $('#search-input').on('keyup', function (e) {
 });
 
 $('#manga-list').on('click', '.see-detail', function () {
-    $('.modal-body').html('<b> Please Wait!!! </b>')
+    $('.modal-title').text('');
+    $('.modal-body').html(`
+        <div class="text-center">
+            <b>Please Wait!!!</b>
+                <br>
+            <img src="https://cdn.discordapp.com/attachments/795771950076133438/878943216370610216/menhera.gif" class="rounded">
+        </div>
+        
+    `);
+
     $.getJSON('http://localhost:3000/' + $(this).data('endpoint'), function (result) {
         const data = result.data;
 
@@ -98,6 +149,7 @@ $('#manga-list').on('click', '.see-detail', function () {
                             <li class="list-group-item"><b>Ilustrator:</b> ${data.illustrator.map(a => `<a href="${a.link}">${a.name}</a>`).join(', ')}</li>
                             <li class="list-group-item"><b>Genre:</b> ${data.genre.map(a => `<a href="${a.link}">${a.name}</a>`).join(', ')}</li>
                             <li class="list-group-item"><b>Score:</b> ⭐${data.score}</li>
+                            <li class="list-group-item"><button class="btn btn-outline-dark" type="button">Favorit</button></li>
                         </ul>
                     </div>
                 </div>
@@ -121,11 +173,13 @@ $('#manga-list').on('click', '.see-detail', function () {
             </div>
         `);
     });
+
 });
 
-function changeChapter() {
-
-}
+// function addFavorite() {
+//     db.set('favorites', [...db.get('favorites'), data]).write();
+//     alert('Berhasil ditambahkan ke favorit');
+// }
 
 function generateChapterList(array) {
     const temp = [];
