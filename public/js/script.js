@@ -1,36 +1,70 @@
-/*Checking query paramter*/
-const url = window.location.href;
-const params = new URL(url);
-if (params.hash.length > 0) {
-    const endpoint = params.hash.substr(1);
-    $.getJSON('http://localhost:3000/api/chapter/' + endpoint, function (result) {
-        const data = result.data;
-        const images = data.chapter_images.map(a => `<img src="${a}" class="img-fluid" alt="Responsive image">`);
-        $('#mangas').html(`
-            <div class="row mt-4 justify-content-center">
-                ${images.join('\n')}
-            </div>
-        `);
-    });
-} else {
-    $('#mangas').html(`
-    <div class="row mt-4 justify-content-center">
-        <div class="col">
-            <h1 class="text-center">Search Manga</h1>
+getReader();
 
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Title...." id="search-input">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-dark" type="button" id="button-search">Search</button>
+/*Checking query paramter*/
+function getReader() {
+    const url = window.location.href;
+    const params = new URL(url);
+    if (params.hash.length > 0) {
+        console.log(window.location);
+        $('#mangas').html(`
+                <div class="row mt-4 justify-content-center">
+                    <h1> Tunggu sebentar ya! </h1>
+                </div>
+            `);
+
+        const endpoint = params.hash.substr(1);
+        $.getJSON('http://localhost:3000/chapter/' + endpoint, function (result) {
+            const data = result.data;
+
+            const images = data.chapter_images.map(a => `<img src="${a}" class="img-fluid" alt="Responsive image">`);
+            const nav = data.chapter;
+            const next = nav.next ?
+                `<a href="#${nav.next}" target="_blank"><button type="button" class="btn btn-dark btn-lg btn-block" onClick="window.close();">Chapter Selanjutnya</button></a>`
+                : `<button type="button" class="btn btn-dark btn-lg btn-block" disabled>Chapter Selanjutnya</button>`;
+            const prev = nav.previous ?
+                `<a href="#${nav.previous}" target="_blank"><button type="button" class="btn btn-dark btn-lg btn-block" onClick="window.close();">Chapter Sebelumnya</button></a>`
+                : `<button type="button" class="btn btn-dark btn-lg btn-block" disabled>Chapter Sebelumnya</button>`;
+
+            $('#mangas').html(`
+                <div class="row mt-4 justify-content-center">
+                    ${images.join('\n')}
+                </div>
+                <hr>
+                <div class="row mt-4">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-8 col-sm-6">
+                                ${prev}
+                            </div>
+                            <div class="col-4 col-sm-6">
+                                ${next}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            `);
+        });
+    } else {
+        $('#mangas').append(`
+        <div class="row mt-4 justify-content-center">
+            <div class="col">
+                <h1 class="text-center">Search Manga</h1>
+    
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Title...." id="search-input">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-dark" type="button" id="button-search">Search</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <hr>
-    <div class="row" id="result-text"></div>
-    <div class="row" id="manga-list"></div>
-    `);
+    
+        <hr>
+        <div class="row" id="result-text"></div>
+        <div class="row" id="manga-list"></div>
+        `);
+    }
 }
 
 $('#button-search').on('click', function () {
@@ -45,7 +79,7 @@ $('#search-input').on('keyup', function (e) {
 
 $('#manga-list').on('click', '.see-detail', function () {
     $('.modal-body').html('<b> Please Wait!!! </b>')
-    $.getJSON('http://localhost:3000/api/' + $(this).data('endpoint'), function (result) {
+    $.getJSON('http://localhost:3000/' + $(this).data('endpoint'), function (result) {
         const data = result.data;
 
         $('.modal-title').text(`${data.title ? data.title : 'Invalid Name'}`);
@@ -89,6 +123,10 @@ $('#manga-list').on('click', '.see-detail', function () {
     });
 });
 
+function changeChapter() {
+
+}
+
 function generateChapterList(array) {
     const temp = [];
     array.forEach(function (a, i) {
@@ -96,7 +134,7 @@ function generateChapterList(array) {
             <tr>    
                 <td>${a.title}</td>
                 <td><a href="#${a.endpoint}" target="_blank"><button type="button" class="btn btn-dark btn-sm btn-block">Baca Komik</button></a></td>
-                <td><a href="#${a.download.pdf}"><button type="button" class="btn btn-dark btn-sm btn-block"><i class="fa fa-download"></i></button></a></td>
+                <td><a href="${a.download.pdf}"><button type="button" class="btn btn-dark btn-sm btn-block"><i class="fa fa-download"></i></button></a></td>
             </tr>
         `);
     });
@@ -110,7 +148,7 @@ function searchManga() {
     $('#manga-list').html('');
     $('#result-text').html('');
 
-    $.getJSON('http://localhost:3000/api/cari/' + input, function (result) {
+    $.getJSON('http://localhost:3000/cari/' + input, function (result) {
         console.log(result);
         if (result.data.length > 0) {
 

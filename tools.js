@@ -53,6 +53,7 @@ module.exports = {
 
             return pdfStream;
         } catch (error) {
+            console.log(error);
             return null;
         }
     }

@@ -12,15 +12,22 @@ router.get('/:query', async (req, res) => {
         data.chapter_name = $('h1.entry-title').text().replace('Komik ', '').trim();
         data.chapter_url = `https://komikindo.id/${req.params.query}/`;
         data.chapter_endpoint = `${req.params.query}/`;
+
         data.chapter_images = [];
         $(main).find('img').each((i, e) => {
             const image = $(e).attr('src');
             data.chapter_images.push(image);
         });
         data.chapter_length = data.chapter_images.length;
+
+        const nav = $('.navig > .nextprev');
+        data.chapter = {
+            previous: $(nav).find('[rel=prev]').attr('href') ? $(nav).find('[rel=prev]').attr('href').replace('https://komikindo.id/', '') : null,
+            next: $(nav).find('[rel=next]').attr('href') ? $(nav).find('[rel=next]').attr('href').replace('https://komikindo.id/', '') : null,
+        }
+
         data.download_link = {
-            zip: `https://posantai.bugs.today/komikindo/download/${req.params.query}/zip`,
-            pdf: `https://posantai.bugs.today/komikindo/download/${req.params.query}/pdf`,
+            pdf: `http://205.185.113.50/komik/download/${req.params.query}`,
         };
 
         res.send({ success: true, data });
