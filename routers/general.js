@@ -132,6 +132,10 @@ router.get('/komik/:endpoint', async (req, res) => {
 
             chapters.push(obj);
         });
+        manga.link = {
+            url: `https://komikindo.id/komik/${req.params.endpoint}`,
+            endpoint: req.params.endpoint
+        };
 
         res.send({ success: true, data: manga });
     } catch (error) {
