@@ -4,27 +4,29 @@ const helmet = require('helmet');
 const cors = require('cors');
 
 /* ============ */
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4873;
+
+/* Backend */
 const general = require('./routers/general');
 const link = require('./routers/chapter');
 const download = require('./routers/download');
+const extra = require('./routers/extra');
 
+/*---*/
 const app = express();
 app.use(cors());
 app.use(helmet());
-app.use('/download', download);
-app.use('/', general);
-app.use('/chapter', link);
+app.use(express.text());
+app.use(express.json());
 app.use(express.static('public'));
 
-/* Status */
-app.use('/', async (req, res) => {
-    res.send({
-        status: true,
-        message: 'Komikindo',
-        repo: 'KatowProject'
-    });
-});
+
+/* Path */
+app.use('/download', download);
+app.use('/api', general);
+app.use('/api/chapter', link);
+app.use('/api/extra', extra);
+
 
 app.use('*', async (req, res) => {
     res.status(404).send({ status: false, message: 'api not found' });

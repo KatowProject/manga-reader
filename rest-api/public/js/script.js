@@ -55,7 +55,7 @@ if (params.hash == '#favorite') {
             `);
 
     const endpoint = params.hash.substr(1);
-    $.getJSON('http://localhost:3000/chapter/' + endpoint, function (result) {
+    $.getJSON('http://localhost:4873/api/chapter/' + endpoint, function (result) {
         const data = result.data;
 
         document.title = `${data.chapter_name}`;
@@ -119,6 +119,7 @@ $('#mangas').on('click', '.navv', function (e) {
 });
 
 $('#button-search').on('click', function () {
+    console.log('masuk')
     searchManga();
 });
 
@@ -130,16 +131,17 @@ $('#search-input').on('keyup', function (e) {
 
 
 $('#manga-list').on('click', '.see-detail', function () {
+    console.log('masuk');
     $('.modal-title').text('');
     $('.modal-body').html(`
         <div class="text-center">
             <b>Please Wait!!!</b>
             <br>
-            <img src="https://cdn.discordapp.com/attachments/795771950076133438/878943216370610216/menhera.gif" class="rounded">
+            <img src="/image/menhera.gif" class="rounded">
         </div>  
     `);
 
-    $.getJSON('http://localhost:3000/' + $(this).data('endpoint'), function (result) {
+    $.getJSON('http://localhost:4873/api/' + $(this).data('endpoint'), function (result) {
         const data = result.data;
 
         $('.modal-title').text(`${data.title ? data.title : 'Invalid Name'}`);
@@ -148,7 +150,7 @@ $('#manga-list').on('click', '.see-detail', function () {
         <div class="container-fluid">
         <div class="row">
                     <div class="col-md-4">
-                    <img src="${data.thumb}" class="img-fluid" alt="...">
+                    <img src="/cache/${data.thumb}" class="img-fluid" alt="...">
                     </div>
                     <div class="col-md-8">
                     <ul class="list-group">
@@ -195,7 +197,7 @@ $('#manga-list').on('click', '.remove-favorite', function () {
 
 function addFavorite(endpoint) {
     const mangas = db.get('favorites') ? db.get('favorites') : [];
-    $.getJSON(`http://localhost:3000/${endpoint}`, function (result) {
+    $.getJSON(`http://localhost:4873/api/${endpoint}`, function (result) {
         const data = result.data;
         const findManga = mangas.find(a => a.title == data.title);
         if (findManga) {
@@ -216,7 +218,7 @@ function addFavorite(endpoint) {
 
 function removeFavorite(data) {
     const mangas = db.get('favorites') ? db.get('favorites') : [];
-    $.getJSON(`http://localhost:3000/${data}`, function (result) {
+    $.getJSON(`http://localhost:4873/api/${data}`, function (result) {
         const data = result.data;
         const findManga = mangas.find(a => a.title == data.title);
         if (findManga) {
@@ -250,7 +252,7 @@ function searchManga() {
     $('#manga-list').html('');
     $('#result-text').html('');
 
-    $.getJSON('http://localhost:3000/cari/' + input, function (result) {
+    $.getJSON('http://localhost:4873/api/cari/' + input, function (result) {
         console.log(result);
         if (result.data.length > 0) {
 
@@ -262,9 +264,9 @@ function searchManga() {
                         <img src="${value.thumb}" class="card-img-top" alt="...">
                             <div class="card-body">
                                 <h5 class="card-title">${value.title}</h5>
-                                <a href="#" class="btn btn-dark btn-sm btn-block see-detail" data-toggle="modal" data-endpoint=${value.link.endpoint} data-target="#exampleModal">Detail</a>
-                                <a href="#" class="btn btn-dark btn-sm btn-block add-favorite" data-toggle="modal" data-endpoint=${value.link.endpoint} data-target="">⭐</a>
-                                <a href="#" class="btn btn-dark btn-sm btn-block remove-favorite" data-toggle="modal" data-endpoint=${value.link.endpoint} data-target="">🚫</a>
+                                <a class="btn btn-dark btn-sm btn-block see-detail" data-toggle="modal" data-endpoint=${value.link.endpoint} data-target="#exampleModal">Detail</a>
+                                <a class="btn btn-dark btn-sm btn-block add-favorite" data-toggle="modal" data-endpoint=${value.link.endpoint} data-target="">⭐</a>
+                                <a class="btn btn-dark btn-sm btn-block remove-favorite" data-toggle="modal" data-endpoint=${value.link.endpoint} data-target="">🚫</a>
                             </div>
                     </div>
                 </div>

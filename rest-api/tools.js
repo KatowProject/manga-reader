@@ -4,6 +4,8 @@ const baseURL = 'https://komikindo.id/';
 const cookieJar = new tough.CookieJar();
 const PDFDocument = require('pdfkit');
 const getStream = require('get-stream');
+const fs = require('fs');
+const https = require('https');
 
 axios.defaults.baseURL = baseURL;
 axios.defaults.jar = cookieJar;
@@ -12,7 +14,7 @@ axios.defaults.jar = cookieJar;
 // Create a document
 module.exports = {
     axios: {
-        get: (url) => {
+        get: (url, option = {}) => {
             return new Promise(async (resolve, reject) => {
                 try {
                     const res = await axios.get(url);
