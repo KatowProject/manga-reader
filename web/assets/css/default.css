@@ -1,0 +1,15 @@
+/* Light mode */
+@media (prefers-color-scheme: light) {
+    @import url("light.css");
+}
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    @import url("dark.css");
+}
+
+#btn-back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: none;
+  }
