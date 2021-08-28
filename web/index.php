@@ -1,4 +1,11 @@
-<?php define('BASEPATH', dirname(__FILE__)); 
+<?php 
+    ob_start();
+    session_start();
+    if (!isset($_SESSION['user_id'])) {
+       header('location: /login.php');
+    }
+
+    define('BASEPATH', dirname(__FILE__)); 
     require('./curl.php');
 ?>
 
@@ -8,7 +15,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="assets/image/kato.png" />
+    <link rel="icon" type="image/png" href="/assets/image/kato.png" />
     <!--CSS-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" 
         integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
@@ -31,11 +38,20 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#favorite" target="_blank">Favorite</a>
+            <ul class="navbar-nav ml-auto nav-flex-icons">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user"></i>
+                    </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink-333">
+                    <a class="dropdown-item" href="/logout">Logout</a>
+                    <a class="dropdown-item" href="/favorite">Favorite</a>
+                </div>
                 </li>
             </ul>
+                
+                
             <!-- <form class="form-inline my-lg-0">
                 <input type="text" class="form-control" placeholder="Title...." id="search-input">
                 <div class="input-group-prepend">
@@ -86,7 +102,7 @@
         </div>
     </div>
 
-    <button type="button" class="btn btn-danger btn-floating btn-lg" id="btn-back-to-top">
+    <button type="button" class="btn btn-dark btn-floating btn-lg" id="btn-back-to-top">
         <i class="fas fa-arrow-up"></i>
     </button>
     <!-- Footer -->
@@ -106,7 +122,7 @@
         integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
     
     <!-- Optional JavaScript -->
-    <script src="assets/js/script.js"></script>
+    <script src="/assets/js/script.js"></script>
 
 </body>
 

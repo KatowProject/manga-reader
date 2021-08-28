@@ -14,24 +14,24 @@ const db = {
 
 $('#button-search').on('click', function () {
     const value = $('#search-input').val();
-    const endpoint = `?s=${value}`;
+    const endpoint = `/search/${value}`;
     const url = `${endpoint}`;
 
-    window.location.href = window.location.pathname + url;
+    window.location.href = url;
 })
 
-$('.see-detail').on('click', function () {
+$('#mangas').on('click', '.see-detail', function () {
     console.log('masuk');
     $('.modal-title').text('');
     $('.modal-body').html(`
         <div class="text-center">
             <b>Please Wait!!!</b>
             <br>
-            <img src="assets/image/menhera.gif" class="rounded">
+            <img src="/assets/image/menhera.gif" class="rounded">
         </div>  
     `);
 
-    $.getJSON('http://localhost:4873/api/' + $(this).data('endpoint'), function (result) {
+    $.getJSON('http://komikato.bugs.today/api/' + $(this).data('endpoint'), function (result) {
         const data = result.data;
 
         $('.modal-title').text(`${data.title ? data.title : 'Invalid Name'}`);
@@ -62,14 +62,14 @@ $('.see-detail').on('click', function () {
                     </div>
                 <hr>
                 <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-12" style="overflow-y: scroll; height:400px;">
                         <table class="table table-striped table-bordered table-paginate" cellspacing="0">
-                        <tbody>
+                            <tbody>
                                 ${generateChapterList(data.chapters).join('\n')}
-                                </tbody>
-                                </table>
+                            </tbody>
+                        </table>
                     </div>
-                    </div>
+                </div>
             </div>
             `);
 
@@ -84,7 +84,7 @@ function generateChapterList(array) {
         temp.push(`
             <tr>    
                 <td>${a.title}</td>
-                <td><a href="?c=${a.endpoint}" target="_blank"><button type="button" class="btn btn-dark btn-sm btn-block">Baca Komik</button></a></td>
+                <td><a href="/chapter/${a.endpoint}" target="_blank"><button type="button" class="btn btn-dark btn-sm btn-block">Baca Komik</button></a></td>
                 <td><a href="${a.download.pdf}"><button type="button" class="btn btn-dark btn-sm btn-block"><i class="fa fa-download"></i></button></a></td>
             </tr>
         `);
@@ -94,7 +94,7 @@ function generateChapterList(array) {
 };
 
 
-$('.favorite').on('click', function () {
+$('#mangas').on('click', '.favorite', function () {
     const endpoint = $(this).data('endpoint');
     const classes = $(this).attr('class');
     const changeClass = classes.replace('btn-dark', 'btn-danger');
@@ -102,12 +102,14 @@ $('.favorite').on('click', function () {
 
     const toChange = $(this);
 
-    $.getJSON('http://localhost:4873/api/' + endpoint, function (result) {
+    $.getJSON('http://komikato.bugs.today/api/' + endpoint, function (result) {
         const data = result.data;
+        console.log(endpoint);
         const favorites = db.get('favorites');
 
         if (favorites) {
-            const findSame = favorites.find(a => a.endpoint === data.endpoint);
+            const findSame = favorites.find(a => a.link.endpoint === data.link.endpoint);
+            console.log(findSame);
             if (findSame) {
                 favorites.splice(favorites.indexOf(findSame), 1);
                 db.set('favorites', favorites);
@@ -115,7 +117,8 @@ $('.favorite').on('click', function () {
                 $(toChange).attr('class', changeClass2);
                 alert(`${data.title} sudah dihapus dalam daftar favorit!`);
             } else {
-                db.set('favorites', JSON.parse(favorites).concat(data));
+                console.log(data);
+                db.set('favorites', favorites.concat(data));
                 $(toChange).attr('class', changeClass);
 
                 alert('Sudah Masuk ke dalam daftar Favorit!');
@@ -151,4 +154,36 @@ mybutton.addEventListener("click", backToTop);
 function backToTop() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
+}
+
+/*Get Favorite*/
+function getFavorite() {
+    const mangas = db.get('favorites');
+    $('#mangas').append(`
+        <hr>
+        <div class="row" id="result-text"></div>
+        <div class="row" id="manga-list"></div>
+    `);
+    if (mangas.length > 0) {
+        $.each(mangas, function (index, value) {
+            $('#manga-list').append(`
+            <div class="col-md-4">
+                <div class="card mb-3" style="width: auto;">
+                    <img src="${value.thumb}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">${value.title}</h5>
+                            <a href="#" class="btn btn-dark btn-sm btn-block see-detail" data-toggle="modal" data-endpoint=komik/${value.link.endpoint} data-target="#exampleModal">Detail</a>
+                            <a href="#" class="btn btn-danger btn-sm btn-block favorite" data-toggle="modal" data-endpoint=komik/${value.link.endpoint} data-target>⭐</a>
+                        </div>
+                </div>
+            </div>
+            `);
+        });
+    } else {
+        $('#manga-list').html(`
+            <div class="col">
+                <h2 class="text-center">Belum ada manga yang difavorite</h2>
+            </div>
+        `);
+    }
 }

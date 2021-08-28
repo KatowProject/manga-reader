@@ -10,13 +10,12 @@ const PORT = process.env.PORT || 4873;
 const general = require('./routers/general');
 const link = require('./routers/chapter');
 const download = require('./routers/download');
-const extra = require('./routers/extra');
+const account = require('./routers/account');
 
 /*---*/
 const app = express();
 app.use(cors());
 app.use(helmet());
-app.use(express.text());
 app.use(express.json());
 app.use(express.static('public'));
 
@@ -25,7 +24,7 @@ app.use(express.static('public'));
 app.use('/download', download);
 app.use('/api', general);
 app.use('/api/chapter', link);
-app.use('/api/extra', extra);
+app.use('/api/account', account);
 
 
 app.use('*', async (req, res) => {

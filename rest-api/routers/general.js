@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const cheerio = require('cheerio');
 const { axios } = require('../tools');
+const db = require('../database');
 
 /* Checking Status */
 router.get('/', async (req, res) => {
@@ -350,4 +351,23 @@ router.get('/komik/:endpoint', async (req, res) => {
     }
 });
 
+router.post('/login', async (req, res) => {
+    try {
+        const username = req.body.username;
+        const password = req.body.password;
+
+        const accs = db.account.get(username);
+        if (accs) {
+            if (accs.password === password) {
+                res.send({ success: true, data: accs });
+            } else {
+                res.send({ success: false, message: 'Password salah' });
+            }
+        } else {
+            res.send({ success: false, message: 'Akun tidak ditemukan' });
+        };
+    } catch (error) {
+        res.send({ suceess: false, message: error.message });
+    }
+});
 module.exports = router;

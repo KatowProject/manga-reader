@@ -21,13 +21,13 @@
                 <div class="btn-group btn-group-toggle btn-group-lg btn-block">
                     <?php 
                     if ($prev != null) {
-                        echo "<a href='?c=$prev' class='btn btn-outline-secondary'>Previous</a>";
+                        echo "<a href='/chapter/$prev' class='btn btn-outline-secondary'>Previous</a>";
                     } else {
                         echo "<a href='#' class='btn btn-outline-secondary disabled'>Previous</a>";
                     }
                     
                     if ($next != null) {
-                        echo "<a href='?c=$next' class='btn btn-outline-secondary'>Next</a>";
+                        echo "<a href='/chapter/$next' class='btn btn-outline-secondary'>Next</a>";
                     } else {
                         echo "<a href='#' class='btn btn-outline-secondary disabled'>Next</a>";
                     }
@@ -48,13 +48,13 @@
                 <div class="btn-group btn-group-toggle btn-group-lg btn-block">
                     <?php 
                     if ($prev != null) {
-                        echo "<a href='?c=$prev' class='btn btn-outline-secondary'>Previous</a>";
+                        echo "<a href='/chapter/$prev' class='btn btn-outline-secondary'>Previous</a>";
                     } else {
                         echo "<a href='#' class='btn btn-outline-secondary disabled'>Previous</a>";
                     }
                     
                     if ($next != null) {
-                        echo "<a href='?c=$next' class='btn btn-outline-secondary'>Next</a>";
+                        echo "<a href='/chapter/$next' class='btn btn-outline-secondary'>Next</a>";
                     } else {
                         echo "<a href='#' class='btn btn-outline-secondary disabled'>Next</a>";
                     }
