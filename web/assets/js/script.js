@@ -12,13 +12,23 @@ const db = {
     }
 }
 
-$('#button-search').on('click', function () {
-    const value = $('#search-input').val();
-    const endpoint = `/search/${value}`;
-    const url = `${endpoint}`;
+function getSearch(source) {
 
-    window.location.href = url;
-})
+    if (source === 'komikindo') {
+        const value = $('#search-input').val();
+        const endpoint = `/${source}/search/page/1/?s=${value}`;
+        const url = `${endpoint}`;
+
+        window.location.href = url;
+    } else if (source === 'mangabat') {
+        const value = $('#search-input').val();
+        const endpoint = `/${source}/search/${value}/?page=1`
+
+        window.location.href = endpoint;
+    }
+
+}
+
 
 $('#mangas').on('click', '.see-detail', function () {
     console.log('masuk');
@@ -31,19 +41,24 @@ $('#mangas').on('click', '.see-detail', function () {
         </div>  
     `);
 
-    $.getJSON('http://komikato.bugs.today/api/' + $(this).data('endpoint'), function (result) {
-        const data = result.data;
+    const source = $(this).data('source');
+    if (source === 'komikindo') {
+        $.getJSON('http://127.0.0.1:4873/komikindo/api/' + $(this).data('endpoint'), function (result) {
+            const data = result.data;
 
-        $('.modal-title').text(`${data.title ? data.title : 'Invalid Name'}`);
+            $('.modal-title').text(`${data.title ? data.title : 'Invalid Name'}`);
 
-        $('.modal-body').html(`
-        <div class="container-fluid">
-        <div class="row">
+            let isScroll = '';
+            if (data.chapters.length > 7) isScroll = `style="overflow-y: scroll; height:400px;"`;
+            $('.modal-body').html(`
+            <div class="container-fluid">
+                <div class="row">
                     <div class="col-md-4">
-                    <img src="${data.thumb}" class="img-fluid" alt="...">
+                        <img src="${data.thumb}" class="img-fluid" alt="...">
                     </div>
+
                     <div class="col-md-8">
-                    <ul class="list-group">
+                        <ul class="list-group">
                             <li class="list-group-item"><b>Alternatif:</b> ${data.alter.length > 1 ? data.alter.join(', ') : data.alter}</li>
                             <li class="list-group-item"><b>Status:</b> ${data.status}</li>
                             <li class="list-group-item"><b>Pengarang:</b> ${data.pengarang.map(a => `<a href="${a.link}">${a.name}</a>`).join(', ')}</li>
@@ -51,18 +66,21 @@ $('#mangas').on('click', '.see-detail', function () {
                             <li class="list-group-item"><b>Genre:</b> ${data.genre.map(a => `<a href="${a.link}">${a.name}</a>`).join(', ')}</li>
                             <li class="list-group-item"><b>Score:</b> ⭐${data.score}</li>
                         </ul>
-                        </div>
+                    </div>
                 </div>
                 
                 <hr>
+
                 <div class="row">
-                <div class="col-sm-12">
-                <p>${data.sinopsis}</p>
+                    <div class="col-sm-12">
+                        <p>${data.sinopsis}</p>
                     </div>
-                    </div>
+                </div>
+
                 <hr>
+
                 <div class="row">
-                    <div class="col-sm-12" style="overflow-y: scroll; height:400px;">
+                    <div class="col-sm-12" ${isScroll}">
                         <table class="table table-striped table-bordered table-paginate" cellspacing="0">
                             <tbody>
                                 ${generateChapterList(data.chapters).join('\n')}
@@ -70,22 +88,74 @@ $('#mangas').on('click', '.see-detail', function () {
                         </table>
                     </div>
                 </div>
+
             </div>
             `);
 
 
-    });
+        });
+    } else if (source === 'mangabat') {
+        $.getJSON(`http://127.0.0.1:4873/mangabat/api/comic/${$(this).data('endpoint')}`, function (result) {
+            const data = result.data;
+
+            $('.modal-title').text(`${data.title ? data.title : 'Invalid Name'}`);
+
+            let isScroll = '';
+            if (data.chapters.length > 7) isScroll = `style="overflow-y: scroll; height:400px;"`;
+            $('.modal-body').html(`
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img src="${data.thumb}" class="img-fluid" alt="...">
+                    </div>
+
+                    <div class="col-md-8">
+                        <ul class="list-group">
+                            <li class="list-group-item"><b>Alternatif:</b> ${data.alter.length > 1 ? data.alter.join(', ') : data.alter}</li>
+                            <li class="list-group-item"><b>Status:</b> ${data.status}</li>
+                            <li class="list-group-item"><b>Author:</b> ${data.author.map(a => `<a href="${a.link}">${a.name}</a>`).join(', ')}</li>
+                            <li class="list-group-item"><b>Genre:</b> ${data.genre.map(a => `<a href="${a.url}">${a.name}</a>`).join(', ')}</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <hr>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <p>${data.synopsis}</p>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-sm-12" ${isScroll}">
+                        <table class="table table-striped table-bordered table-paginate" cellspacing="0">
+                            <tbody>
+                                ${generateChapterList(data.chapters).join('\n')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            `);
+        });
+    }
 });
 
 
 function generateChapterList(array) {
     const temp = [];
+
+    const firstPath = window.location.pathname.split('/')[1];
     array.forEach(function (a, i) {
         temp.push(`
             <tr>    
-                <td>${a.title}</td>
-                <td><a href="/chapter/${a.endpoint}" target="_blank"><button type="button" class="btn btn-dark btn-sm btn-block">Baca Komik</button></a></td>
-                <td><a href="${a.download.pdf}"><button type="button" class="btn btn-dark btn-sm btn-block"><i class="fa fa-download"></i></button></a></td>
+                <td>${a.name ? a.name : a.title}</td>
+                <td><a href="/${firstPath}/chapter/${a.link.endpoint ? a.link.endpoint : a.endpoint}" target="_blank"><button type="button" class="btn btn-dark btn-sm btn-block">Baca Komik</button></a></td>
+                <td><a href="#"><button type="button" class="btn btn-dark btn-sm btn-block"><i class="fa fa-download"></i></button></a></td>
             </tr>
         `);
     });
@@ -102,7 +172,7 @@ $('#mangas').on('click', '.favorite', function () {
 
     const toChange = $(this);
 
-    $.getJSON('http://komikato.bugs.today/api/' + endpoint, function (result) {
+    $.getJSON('http://127.0.0.1:4873/komikindo/api' + endpoint, function (result) {
         const data = result.data;
         console.log(endpoint);
         const favorites = db.get('favorites');

@@ -1,11 +1,13 @@
 <?php  define('BASEPATH', dirname(__FILE__));
     ob_start();
-    session_start();
+    session_start([
+      'cookie_lifetime' => 86400,
+  ]);
 
     require('./curl.php');
 
     if (isset($_SESSION['user_id'])) {
-        header('Location: /index.php');
+        header('Location: /');
     }
 
     if (isset($_POST['submit'])) {
@@ -27,7 +29,7 @@
                 $_SESSION['user_id'] = $response['data']['user_id'];
                 $_SESSION['username'] = $response['data']['username'];
 
-                header('Location: /index.php');
+                header('Location: /');
             } else {
                 $err_message = $response['message'];
                 echo "<script>alert('$err_message')</script>";
@@ -49,7 +51,7 @@
     <meta name="description" content="Login Page">
     <meta name="author" content="Katoww">
     <meta name="generator" content="w">
-    <link rel="icon" type="image/png" href="/assets/image/kato.png" />
+    <link rel="icon" type="image/png" href="https://cdn.discordapp.com/emojis/750342786825584811.png" />
     <title>Login · Manga Reader</title>
 
     
@@ -81,7 +83,7 @@
     
 <main class="form-signin">
   <form action="" method="post">
-    <img class="mb-4" src="/assets/image/kato.png" alt="" width="75" height="75">
+    <img class="mb-4" src="https://cdn.discordapp.com/emojis/750342786825584811.png" alt="" width="75" height="75">
     <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
     <div class="form-floating">

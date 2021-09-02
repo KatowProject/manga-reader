@@ -1,5 +1,5 @@
 <?php defined('BASEPATH') or die('No direct script access allowed'); 
-    $url = 'http://127.0.0.1:4873/api/chapter/'.urlencode($_GET['c']);
+    $url = 'http://127.0.0.1:4873/komikindo/api/chapter/'.urlencode($_GET['c']);
     $response = getSearch($url);
 
     $next = $response['data']['chapter']['next'];
@@ -21,13 +21,13 @@
                 <div class="btn-group btn-group-toggle btn-group-lg btn-block">
                     <?php 
                     if ($prev != null) {
-                        echo "<a href='/chapter/$prev' class='btn btn-outline-secondary'>Previous</a>";
+                        echo "<a href='/komikindo/chapter/$prev' class='btn btn-outline-secondary'>Previous</a>";
                     } else {
                         echo "<a href='#' class='btn btn-outline-secondary disabled'>Previous</a>";
                     }
                     
                     if ($next != null) {
-                        echo "<a href='/chapter/$next' class='btn btn-outline-secondary'>Next</a>";
+                        echo "<a href='/komikindo/chapter/$next' class='btn btn-outline-secondary'>Next</a>";
                     } else {
                         echo "<a href='#' class='btn btn-outline-secondary disabled'>Next</a>";
                     }
@@ -48,13 +48,13 @@
                 <div class="btn-group btn-group-toggle btn-group-lg btn-block">
                     <?php 
                     if ($prev != null) {
-                        echo "<a href='/chapter/$prev' class='btn btn-outline-secondary'>Previous</a>";
+                        echo "<a href='/komikindo/chapter/$prev' class='btn btn-outline-secondary'>Previous</a>";
                     } else {
                         echo "<a href='#' class='btn btn-outline-secondary disabled'>Previous</a>";
                     }
                     
                     if ($next != null) {
-                        echo "<a href='/chapter/$next' class='btn btn-outline-secondary'>Next</a>";
+                        echo "<a href='/komikindo/chapter/$next' class='btn btn-outline-secondary'>Next</a>";
                     } else {
                         echo "<a href='#' class='btn btn-outline-secondary disabled'>Next</a>";
                     }

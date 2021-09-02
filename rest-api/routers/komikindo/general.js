@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const cheerio = require('cheerio');
-const { axios } = require('../tools');
-const db = require('../database');
+const { axios } = require('../../tools');
 
 /* Checking Status */
 router.get('/', async (req, res) => {
@@ -240,18 +239,21 @@ router.get('/komik/:type/page/:number', async (req, res) => {
     }
 });
 
-router.get('/cari/:query', async (req, res) => {
+router.get('/cari/:query/page/:pagination', async (req, res) => {
     try {
-        const response = await axios.get(`/?s=${req.params.query}`);
+        const pagination = req.params.pagination ? req.params.pagination : 1
+        const response = await axios.get(`page/${pagination}/?s=${req.params.query}`);
         const $ = cheerio.load(response.data);
 
-        const manga = [];
+        const data = {};
+
+        data.manga = [];
         const main = $('.postbody');
         $(main).find('.film-list > .animepost').each((i, e) => {
             const m = $(e).find('.animposx');
 
             const thumb = $(m).find('.limit > img').attr('src').split('?')[0];
-            manga.push({
+            data.manga.push({
                 title: $(m).find('a').attr('title').replace('Komik ', ''),
                 thumb,
                 link: {
@@ -259,11 +261,21 @@ router.get('/cari/:query', async (req, res) => {
                     url: $(m).find('a').attr('href')
                 }
             });
-        })
+        });
 
-        res.send({ success: true, data: manga });
+        data.pagination = [];
+        $(main).find('.pagination .page-numbers').each((i, a) => {
+            const endpoint = `${$(a).attr('href')}`.replace('https://komikindo.id/', '');
+            data.pagination.push({
+                name: $(a).text(),
+                url: $(a).attr('href') ? $(a).attr('href') : null,
+                endpoint: endpoint !== "undefined" ? endpoint : null,
+            });
+        });
+
+        res.send({ success: true, data });
     } catch (error) {
-        res.send({ suceess: false, message: error.message });
+        res.send({ success: false, message: error });
     }
 });
 
@@ -300,7 +312,7 @@ router.get('/komik/:endpoint', async (req, res) => {
             });
         });
         manga.grafis = {
-            name: $(info).find('span:nth-of-type(5)').text().split(': ')[1].trim(),
+            name: $(info).find('span:nth-of-type(5)').text().split(':')[1].trim(),
             link: $(info).find('span:nth-of-type(5) > a').attr('href'),
             endpoint: $(info).find('span:nth-of-type(5) > a').attr('href').replace('https://komikindo.id/', '')
         };
@@ -313,7 +325,8 @@ router.get('/komik/:endpoint', async (req, res) => {
                 endpoint: $(e).attr('href').replace('https://komikindo.id/', '')
             });
         });
-        manga.tipe = $(info).find('span:nth-of-type(7)').text().split(':')[1].trim();
+        const tipe = $(info).find('span:nth-of-type(7)').text();
+        manga.tipe = tipe.length > 0 ? tipe.split(':')[1].trim() : null;
         manga.genre = [];
         $('.infox').find('.genre-info > a').each((i, e) => {
             const genres = manga.genre;
@@ -347,26 +360,6 @@ router.get('/komik/:endpoint', async (req, res) => {
         res.send({ success: true, data: manga });
     } catch (error) {
         console.log(error);
-        res.send({ suceess: false, message: error.message });
-    }
-});
-
-router.post('/login', async (req, res) => {
-    try {
-        const username = req.body.username;
-        const password = req.body.password;
-
-        const accs = db.account.get(username);
-        if (accs) {
-            if (accs.password === password) {
-                res.send({ success: true, data: accs });
-            } else {
-                res.send({ success: false, message: 'Password salah' });
-            }
-        } else {
-            res.send({ success: false, message: 'Akun tidak ditemukan' });
-        };
-    } catch (error) {
         res.send({ suceess: false, message: error.message });
     }
 });

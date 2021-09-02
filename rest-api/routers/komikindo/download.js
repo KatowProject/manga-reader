@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { axios, generatePDF } = require('../tools');
+const { axios, generatePDF } = require('../../tools');
 
 router.get('/:query', async function (req, res, next) {
     try {

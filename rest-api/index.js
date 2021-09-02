@@ -6,12 +6,6 @@ const cors = require('cors');
 /* ============ */
 const PORT = process.env.PORT || 4873;
 
-/* Backend */
-const general = require('./routers/general');
-const link = require('./routers/chapter');
-const download = require('./routers/download');
-const account = require('./routers/account');
-
 /*---*/
 const app = express();
 app.use(cors());
@@ -21,11 +15,15 @@ app.use(express.static('public'));
 
 
 /* Path */
-app.use('/download', download);
-app.use('/api', general);
-app.use('/api/chapter', link);
-app.use('/api/account', account);
+app.use('/api/account', require('./routers/account'));
 
+app.use('/komikindo/download', require('./routers/komikindo/download'));
+app.use('/komikindo/api', require('./routers/komikindo/general'));
+app.use('/komikindo/api/chapter', require('./routers/komikindo/chapter'));
+
+app.use('/mangabat/api', require('./routers/mangabat/general'));
+app.use('/mangabat/api/chapter', require('./routers/mangabat/chapter'));
+app.use('/mangabat/download', require('./routers/mangabat/download.js'));
 
 app.use('*', async (req, res) => {
     res.status(404).send({ status: false, message: 'api not found' });
