@@ -1,8 +1,6 @@
 <?php 
     ob_start();
-    session_start([
-        'cookie_lifetime' => 86400,
-    ]);
+    session_start();
     if (!isset($_SESSION['user_id'])) {
        header('location: /login');
     };

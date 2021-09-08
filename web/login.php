@@ -1,9 +1,11 @@
 <?php  define('BASEPATH', dirname(__FILE__));
     ob_start();
-    session_start([
-      'cookie_lifetime' => 86400,
-  ]);
-
+    
+    $expire = 365*24*3600; // We choose a one year duration
+    ini_set('session.gc_maxlifetime', $expire);
+    session_start(); //We start the session 
+    setcookie(session_name(),session_id(),time()+$expire); 
+    
     require('./curl.php');
 
     if (isset($_SESSION['user_id'])) {
