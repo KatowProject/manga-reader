@@ -43,7 +43,7 @@ $('#mangas').on('click', '.see-detail', function () {
 
     const source = $(this).data('source');
     if (source === 'komikindo') {
-        $.getJSON('http://127.0.0.1:4873/komikindo/api/' + $(this).data('endpoint'), function (result) {
+        $.getJSON('http://komikato.bugs.today/komikindo/api/' + $(this).data('endpoint'), function (result) {
             const data = result.data;
 
             $('.modal-title').text(`${data.title ? data.title : 'Invalid Name'}`);
@@ -257,3 +257,16 @@ function getFavorite() {
         `);
     }
 }
+
+/* Navigator with Arrow Keyboard */
+$(document).on('keyup', function (e) {
+    switch (e.keyCode) {
+        case 37:
+            window.location.href = $('#prev').attr('href');
+            break;
+
+        case 39:
+            window.location.href = $('#next').attr('href');
+            break;
+    }
+});

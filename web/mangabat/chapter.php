@@ -61,13 +61,13 @@
                 <div class="btn-group btn-group-toggle btn-group-lg btn-block">
                     <?php 
                     if ($prev != null) {
-                        echo "<a href='/mangabat/chapter/$prev' class='btn btn-outline-secondary'>Previous</a>";
+                        echo "<a id='prev' href='/mangabat/chapter/$prev' class='btn btn-outline-secondary'>Previous</a>";
                     } else {
                         echo "<a href='#' class='btn btn-outline-secondary disabled'>Previous</a>";
                     }
                     
                     if ($next != null) {
-                        echo "<a href='/mangabat/chapter/$next' class='btn btn-outline-secondary'>Next</a>";
+                        echo "<a id='next' href='/mangabat/chapter/$next' class='btn btn-outline-secondary'>Next</a>";
                     } else {
                         echo "<a href='#' class='btn btn-outline-secondary disabled'>Next</a>";
                     }
