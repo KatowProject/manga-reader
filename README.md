@@ -57,6 +57,19 @@ server {
 4. Run Nginx and php7.4-fpm
 5. open url **localhost/** in browser
 
+### How to create Account
+1. cd path to **rest-api/**
+2. run node terminal
+3. type per step like this
+```node
+	> const db = require('quick.db');
+	> const tb = new db.table('account');
+	> tb.set('<username>', { username: <username>, password: <password> ,user_id: <user_id>, favorites: [] });
+```
+
+## Login Page
+![](https://i.lolicon.date/gmgqhn.jpeg)
+
 ## Home Page
 ![enter image description here](https://i.lolicon.date/qvvodz.png)
 
