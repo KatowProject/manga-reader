@@ -2,8 +2,8 @@
     $url = 'http://127.0.0.1:4873/mangabat/api/chapter/'.urlencode($_GET['c']);
 
     $response = getSearch($url);
-    $next = $response['data']['navigation']['next']['endpoint'];
-    $prev = $response['data']['navigation']['prev']['endpoint'];
+    $next = $response['data']['navigation']['next'];
+    $prev = $response['data']['navigation']['prev'];
     $title = $response['data']['chapter_title'];
     $images = $response['data']['chapter_images'];
 
