@@ -62,9 +62,9 @@ server {
 2. run node terminal
 3. type per step like this
 ```node
-	> const db = require('quick.db');
-	> const tb = new db.table('account');
-	> tb.set('<username>', { username: <username>, password: <password> ,user_id: <user_id>, favorites: [] });
+> const db = require('quick.db');
+> const tb = new db.table('account');
+> tb.set('<username>', { username: <username>, password: <password> ,user_id: <user_id>, favorites: [] });
 ```
 
 ## Login Page

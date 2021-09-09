@@ -95,7 +95,7 @@ $('#mangas').on('click', '.see-detail', function () {
 
         });
     } else if (source === 'mangabat') {
-        $.getJSON(`http://127.0.0.1:4873/mangabat/api/comic/${$(this).data('endpoint')}`, function (result) {
+        $.getJSON(`http://komikato.bugs.today/mangabat/api/comic/${$(this).data('endpoint')}`, function (result) {
             const data = result.data;
 
             $('.modal-title').text(`${data.title ? data.title : 'Invalid Name'}`);
@@ -172,7 +172,7 @@ $('#mangas').on('click', '.favorite', function () {
 
     const toChange = $(this);
 
-    $.getJSON('http://127.0.0.1:4873/komikindo/api' + endpoint, function (result) {
+    $.getJSON('http://komikato.bugs.today/komikindo/api' + endpoint, function (result) {
         const data = result.data;
         console.log(endpoint);
         const favorites = db.get('favorites');
