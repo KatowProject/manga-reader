@@ -28,9 +28,9 @@ router.get('/:endpoint', async (req, res) => {
         data.navigation = {};
         $('.navi-change-chapter-btn:nth-of-type(1) > a').each((i, e) => {
             if ($(e).text() === 'PREV CHAPTER') {
-                data.navigation.prev.url = `${$(e).attr('href')}`.split('/').pop();
+                data.navigation.prev = `${$(e).attr('href')}`.split('/').pop();
             } else if ($(e).text() === 'NEXT CHAPTER') {
-                data.navigation.next.url = `${$(e).attr('href')}`.split('/').pop();
+                data.navigation.next = `${$(e).attr('href')}`.split('/').pop();
             }
         });
 
