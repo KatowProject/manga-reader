@@ -7,6 +7,10 @@
     @import url("dark.css");
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 #btn-back-to-top {
     position: fixed;
     bottom: 20px;
