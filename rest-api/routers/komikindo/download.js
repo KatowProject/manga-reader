@@ -3,7 +3,7 @@ const { axios, generatePDF } = require('../../tools');
 
 router.get('/:query', async function (req, res, next) {
     try {
-        const response = await axios.get('http://localhost:3000/chapter/' + req.params.query);
+        const response = await axios.get('http://localhost:4873/komikindo/api/chapter/' + req.params.query);
         const request = response.data;
 
         const images = request.data.chapter_images;
@@ -17,7 +17,7 @@ router.get('/:query', async function (req, res, next) {
             .end(pdfStream);
     } catch (error) {
         console.log(error);
-        res.send({ success: false, error: error.message });
+        res.send({ success: false, error: error.message ? error.message : error });
     }
 });
 
