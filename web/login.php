@@ -3,42 +3,46 @@
     
     $expire = 365*24*3600; // We choose a one year duration
     ini_set('session.gc_maxlifetime', $expire);
+    session_name('session');
     session_start(); //We start the session 
-    setcookie(session_name(),session_id(),time()+$expire); 
     
     require('./curl.php');
-
-    if (isset($_SESSION['user_id'])) {
-        header('Location: /');
+    
+    if (isset($_SESSION['user_id']) or isset($_COOKIE['session'])) {
+      header('Location: /');
     }
-
+    
     if (isset($_POST['submit'])) {
-
-        $user = $_POST['user'];
-        $pass = $_POST['pass'];
-
-        if ($user == "" || $pass == "") {
-            echo "<script>alert('Username tidak boleh kosong')</script>";
+      
+      $user = $_POST['user'];
+      $pass = $_POST['pass'];
+      
+      if ($user == "" || $pass == "") {
+        echo "<script>alert('Username tidak boleh kosong')</script>";
+      } else {
+        $body = json_encode([
+          'username' => $user,
+          'password' => $pass
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        
+        $response = auth($body);
+        
+        if ($response['success'] == true) {
+          $_SESSION['user_id'] = $response['data']['user_id'];
+          $_SESSION['username'] = $response['data']['username'];
+          
+          setcookie(session_name(),session_id(),time()+$expire);
+          setcookie('user_id', $_SESSION['user_id'], time()+$expire);
+          setcookie('username', $_SESSION['username'], time()+$expire);
+          
+          header('Location: /');
         } else {
-            $body = json_encode([
-              'username' => $user,
-              'password' => $pass
-            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-            
-            $response = auth($body);
-            
-            if ($response['success'] == true) {
-                $_SESSION['user_id'] = $response['data']['user_id'];
-                $_SESSION['username'] = $response['data']['username'];
-
-                header('Location: /');
-            } else {
-                $err_message = $response['message'];
-                echo "<script>alert('$err_message')</script>";
-            }
+          $err_message = $response['message'];
+          echo "<script>alert('$err_message')</script>";
         }
+      }
     }
-
+    
     function redirect($url, $statusCode = 303){
       header('Location: ' . $url, true, $statusCode);
       die();

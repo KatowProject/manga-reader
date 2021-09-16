@@ -1,7 +1,8 @@
 <?php 
-    ob_start();
+    session_name('session');
     session_start();
-    if (!isset($_SESSION['user_id'])) {
+    
+    if (!isset($_SESSION['user_id']) or !isset($_COOKIE['user_id'])) {
        header('location: /login');
     };
     define('BASEPATH', dirname(__FILE__)); 
@@ -63,12 +64,16 @@
     <div class="container" id="mangas">
     <?php 
         $s = isset($_GET['s']) ? $_GET['s'] : null;
-        $c = isset($_GET['c']) ? $_GET['c'] : null; 
+        $c = isset($_GET['c']) ? $_GET['c'] : null;
+        $f = isset($_GET['f']) ? $_GET['f'] : null;
+        
         if ($s) {
             require('./search.php');
         } else if ($c) { 
             require('./chapter.php');
-        } else { ?>
+        } else if ($f) {
+            require('./favorite.php');
+        } else{ ?>
         <div class="row mt-4 justify-content-center">
             <div class="col">
                 <h1 class="text-center">Search Manga</h1>
@@ -121,6 +126,7 @@
     
     <!-- Optional JavaScript -->
     <script src="/assets/js/script.js"></script>
+    <script src="/assets/js/util.js"></script>    
 
 </body>
 

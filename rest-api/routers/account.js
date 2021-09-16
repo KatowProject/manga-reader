@@ -26,22 +26,24 @@ router.post('/favorit', async (req, res) => {
     try {
         const username = req.body.username;
         const favorites = req.body.favorites;
-        const method = req.body.method;
+        const type = req.body.type;
 
         const accs = db.account.get(username);
         if (!accs) return res.send({ success: false, message: 'Akun tidak ditemukan' });
 
-        switch (method) {
+        switch (type) {
             case 'add':
-                accs.favorites.concat(favorites);
+                accs.favorites = accs.favorites.concat(favorites);
+                db.account.set(username, accs);
                 res.send({ success: true, data: accs.favorites });
                 break;
             case 'remove':
                 accs.favorites = accs.favorites.filter(fav => fav.title !== favorites.title);
+                db.account.set(username, accs);
                 res.send({ success: true, data: accs.favorites });
                 break;
             case 'list':
-                res.send({ success: true, data: accs.favorites });
+                res.json({ success: true, data: accs.favorites });
                 break;
             default:
                 res.send({ success: false, message: 'Method tidak ditemukan' });

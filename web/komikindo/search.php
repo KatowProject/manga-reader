@@ -9,6 +9,12 @@
     $len = count($response['data']['manga']);
     $komik_list = $response['data'];
 
+    $body_array = json_encode([
+        'username' => $_COOKIE['username'],
+        'type' => 'list'
+    ]);
+    $response_fav = getList($body_array);   
+
     if ($len > 0) { ?>
     <div class="row" id="manga-list">
         <div class="col-md-12"> 
@@ -27,7 +33,16 @@
                 <div class="card-body">
                     <h5 class="card-title text-center"><?php echo $title ?></h5>
                     <a class="btn btn-dark btn-sm btn-block see-detail" href="#" data-toggle="modal" data-source="komikindo"data-endpoint=<?php echo $endpoint ?> data-target="#exampleModal">Detail</a>
-                    <a class="btn btn-dark btn-sm btn-block favorite" data-toggle="modal" data-endpoint=<?php echo $endpoint ?> data-target="">⭐</a>
+                    <?php
+                    $sss = "<a class='btn btn-dark btn-sm btn-block favorite' data-toggle='modal' data-endpoint='$endpoint' data-target=''>⭐</a>";
+                    
+                    foreach ($response_fav['data'] as $favv) {
+                        if (strpos($favv['title'], $title) !== false) {
+                            $sss = "<a class='btn btn-danger btn-sm btn-block unfavorite' data-toggle='modal' data-endpoint='$endpoint' data-target=''>⭐</a>";
+                        } 
+                    }
+                    echo $sss;
+                    ?>
                 </div>
             </div>
         </div>
