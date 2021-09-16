@@ -8,7 +8,7 @@
     
     require('./curl.php');
     
-    if (isset($_SESSION['user_id']) or isset($_COOKIE['session'])) {
+    if (isset($_SESSION['user_id']) or isset($_COOKIE['user_id'])) {
       header('Location: /');
     }
     
