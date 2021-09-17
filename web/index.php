@@ -68,14 +68,6 @@
             <p><a class="btn btn-secondary" href="/mangabat">View details &raquo;</a></p>
         </div><!-- /.col-lg-4 -->
 
-        <div class="col-lg-4">
-            <img src="https://cdn.discordapp.com/attachments/795771950076133438/882442876926185522/images.png" class="bd-placeholder-img rounded-circle" width="140" height="140"/>
-            <h2>Nhentai </h2>
-            <p>Baca Doujin di Source Nhentai.</p>
-            <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
-        </div><!-- /.col-lg-4 -->
-      </div><!-- /.row -->
-
       <hr class="featurette-divider">
     </div><!-- /.container -->
 

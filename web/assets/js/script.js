@@ -211,4 +211,43 @@ $('.unfavorite').on('click', async function () {
         }
     });
 
+});
+
+/* Dynamic Pagination */
+$('#pagination').on('click', 'a', function () {
+    const source = $(this).data('source');
+    const endpoint = $(this).data('endpoint');
+
+    switch (source) {
+        case 'komikindo':
+            $.getJSON(`/komikindo/api/${endpoint}`, function (result) {
+                $('#manga-list').html('');
+                $('#pagination').html('');
+
+                const datas = result.data;
+                datas.manga.forEach(function (a, i) {
+                    $('#manga-list').append(`
+                    <div class="col-md-3">
+                        <div class="card mb-3" style="width: auto;">
+                            <img src=${a.thumb} class="card-img-top" alt="">
+                            <div class="card-body">
+                                <h5 class="card-title text-center">${a.title}</h5>
+                                <a class="btn btn-dark btn-sm btn-block see-detail" href="#" data-toggle="modal" data-source="komikindo" data-endpoint=${a.link.endpoint} data-target="#exampleModal">Detail</a>
+                            </div>
+                        </div>
+                    </div>
+                    `);
+                });
+
+                datas.pagination.forEach(function (a, i) {
+                    if (!a.url && !a.endpoint) {
+                        $('#pagination').append(`<li class='page-item active'><a class='page-link bg-dark text-white'>${a.name}</a></li>`);
+                    } else if (a.endpoint.includes('page')) {
+                        $('#pagination').append(`<li class='page-item'><a class='page-link text-dark' data-source='komikindo' data-endpoint=${a.endpoint} href='#'>${a.name}</a></li>`);
+                    } else {
+                        $('#pagination').append(`<li class='page-item'><a class='page-link text-dark' data-source='komikindo' data-endpoint=${a.endpoint}/page/1 href='#'>${a.name}</a></li>`);
+                    }
+                });
+            });
+    }
 })

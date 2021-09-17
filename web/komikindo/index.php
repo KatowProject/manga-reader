@@ -2,9 +2,10 @@
     session_name('session');
     session_start();
     
-    if (!isset($_SESSION['user_id']) or !isset($_COOKIE['user_id'])) {
+    if (!isset($_COOKIE['user_id']) or !isset($_SESSION['user_id'])) {
        header('location: /login');
     };
+
     define('BASEPATH', dirname(__FILE__)); 
     require('../curl.php');
 ?>
@@ -66,17 +67,17 @@
         $s = isset($_GET['s']) ? $_GET['s'] : null;
         $c = isset($_GET['c']) ? $_GET['c'] : null;
         $f = isset($_GET['f']) ? $_GET['f'] : null;
-        
+
         if ($s) {
             require('./search.php');
         } else if ($c) { 
             require('./chapter.php');
         } else if ($f) {
             require('./favorite.php');
-        } else{ ?>
+        } else { ?>
         <div class="row mt-4 justify-content-center">
             <div class="col">
-                <h1 class="text-center">Search Manga</h1>
+                <h1 class="text-center">Home</h1>
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" placeholder="Title...." id="search-input">
                                 <div class="input-group-append">
@@ -86,6 +87,57 @@
             </div>
         </div>
         <hr>
+
+        <?php
+            $url = 'http://127.0.0.1:4873/komikindo/api/daftar-komik/page/1';
+            $datas = getSearch($url);
+        ?>
+
+        <hr>
+
+        <div class="row" id="manga-list">
+            <?php 
+                foreach ($datas['data']['manga'] as $data) {
+                    $img = $data['thumb'];
+                    $endpoint = $data['link']['endpoint'];
+                    $title = $data['title'];
+            ?>
+            <div class="col-md-3">
+                <div class="card mb-3" style="width: auto;">
+                    <img src="<?php echo $img ?>" class="card-img-top" alt="">
+                    <div class="card-body">
+                        <h5 class="card-title text-center"><?php echo $title ?></h5>
+                        <a class="btn btn-dark btn-sm btn-block see-detail" href="#" data-toggle="modal" data-source="komikindo"data-endpoint=<?php echo $endpoint ?> data-target="#exampleModal">Detail</a>
+                    </div>
+                </div>
+            </div>
+            <?php
+                }
+            ?>
+        </div>
+        
+        <div class="col-md-12">
+            <hr>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center" id="pagination">
+                    <?php 
+                        foreach ($datas['data']['pagination'] as $value) {
+                            $name = $value['name'];
+                            $endpoint = $value['endpoint'];
+                            if ($value['url'] == NULL && $value['endpoint'] == NULL) {
+                                echo "<li class='page-item active'><a class='page-link bg-dark text-white'>$name</a></li>";
+                            } else if (preg_match('/\bpage\b/', $value['endpoint']) == false) {
+                                echo "<li class='page-item'><a class='page-link text-dark' data-source='komikindo' data-endpoint='$endpoint' href='#'>$name</a></li>";
+                            } else {
+                                echo "<li class='page-item'><a class='page-link text-dark' data-source='komikindo' data-endpoint=$endpoint href='#'>$name</a></li>";  
+                            }
+                        }
+                    ?>
+                </ul>
+            </nav>
+            <hr>
+        </div>
+
     <?php } ?>
 
     </div>

@@ -159,7 +159,7 @@ router.get('/daftar-komik/page/:number', async (req, res) => {
             const m = $(e).find('.animposx');
             manga.push({
                 title: $(m).find('a').attr('title'),
-                thumb: $(m).find('.limit > img').attr('src').split('?')[0],
+                thumb: $(m).find('.limit > img').attr('src')?.split('?')[0],
                 link: {
                     endpoint: $(m).find('a').attr('href').replace('https://komikindo.id/', ''),
                     url: $(m).find('a').attr('href')
@@ -167,8 +167,27 @@ router.get('/daftar-komik/page/:number', async (req, res) => {
             });
         });
 
-        res.send({ success: true, data: manga });
+        const footer = [];
+        $('#menu-footer > li').each((i, e) => {
+            footer.push({
+                name: $(e).find('a').text(),
+                url: $(e).find('a').attr('href'),
+            })
+        });
+
+        const pagination = [];
+        $(main).find('.pagination .page-numbers').each((i, a) => {
+            const endpoint = `${$(a).attr('href')}`.replace('https://komikindo.id/', '');
+            pagination.push({
+                name: $(a).text(),
+                url: $(a).attr('href') ? $(a).attr('href') : null,
+                endpoint: endpoint !== "undefined" ? endpoint : null,
+            });
+        });
+
+        res.send({ success: true, data: { manga, footer, pagination } });
     } catch (error) {
+        console.log(error);
         res.send({ suceess: false, message: error.message });
     };
 });
