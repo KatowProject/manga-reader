@@ -29,8 +29,8 @@
                 <img src=<?php echo $thumb ?> class="card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title text-center"><?php echo $title ?></h5>
-                    <a class="btn btn-dark btn-sm btn-block see-detail" href="#" data-toggle="modal" data-source="komikindo"data-endpoint=<?php echo $endpoint ?> data-target="#exampleModal">Detail</a>
-                    <a class='btn btn-danger btn-sm btn-block unfavorite' data-toggle='modal' data-endpoint=<?php echo $endpoint ?> data-target=''>⭐</a>
+                    <a class="btn btn-dark btn-sm btn-block see-detail" href="#" data-toggle="modal" data-source="komikindo"data-endpoint=<?php echo '/komik/'.$endpoint ?> data-target="#exampleModal">Detail</a>
+                    <a class='btn btn-danger btn-sm btn-block unfavorite' data-toggle='modal' data-endpoint=<?php echo '/komik/'.$endpoint ?>  data-target=''>⭐</a>
                 </div>
             </div>
         </div>

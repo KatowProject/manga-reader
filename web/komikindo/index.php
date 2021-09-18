@@ -2,10 +2,11 @@
     session_name('session');
     session_start();
     
-    if (!isset($_COOKIE['user_id']) or !isset($_SESSION['user_id'])) {
+    if (isset($_COOKIE['session']) == NULL) {
+	var_dump($_COOKIE);
        header('location: /login');
     };
-
+    
     define('BASEPATH', dirname(__FILE__)); 
     require('../curl.php');
 ?>
