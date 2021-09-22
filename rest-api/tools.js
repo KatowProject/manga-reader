@@ -6,6 +6,7 @@ const PDFDocument = require('pdfkit');
 const getStream = require('get-stream');
 const fs = require('fs');
 const https = require('https');
+const cheerio = require('cheerio');
 
 axios.defaults.baseURL = baseURL;
 axios.defaults.jar = cookieJar;
@@ -58,5 +59,29 @@ module.exports = {
             console.log(error);
             return null;
         }
+    },
+    getVideoSrc: async (url) => {
+        try {
+            const response = await axios.get(url);
+            const $ = cheerio.load(response.data);
+            let source1 = $.html().search('"file":');
+            let source2 = $.html().search("'file':");
+            let source3 = $('source').attr('src');
+            let source4 = $('iframe').attr('src');
+
+            if (source1 !== -1) {
+                const end = $.html().indexOf('","');
+                return $.html().substring(source1 + 8, end);
+            } else if (source2 !== -1) {
+                const end = $.html().indexOf("','");
+                return $.html().substring(source2 + 8, end);
+            } else if (source3) {
+                return source3;
+            }
+            return "-";
+        } catch (error) {
+            return "-";
+        }
     }
+
 };

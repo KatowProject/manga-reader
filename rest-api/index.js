@@ -25,6 +25,9 @@ app.use('/mangabat/api', require('./routers/mangabat/general'));
 app.use('/mangabat/api/chapter', require('./routers/mangabat/chapter'));
 app.use('/mangabat/download', require('./routers/mangabat/download.js'));
 
+app.use('/otakudesu/api', require('./routers/otakudesu/general'));
+app.use('/otakudesu/api/anime', require('./routers/otakudesu/anime'));
+
 app.use('*', async (req, res) => {
     res.status(404).send({ status: false, message: 'api not found' });
 });

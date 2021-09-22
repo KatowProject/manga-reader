@@ -10,6 +10,11 @@ function getSearch(source) {
         const endpoint = `/${source}/search/${value}/?page=1`
 
         window.location.href = endpoint;
+    } else if (source === 'otakudesu') {
+        const value = $('#search-input').val();
+        const endpoint = `/${source}/search/${value}`;
+
+        window.location.href = endpoint;
     }
 }
 
@@ -126,6 +131,55 @@ $('#mangas').on('click', '.see-detail', function () {
                     `);
             });
             break;
+
+        case 'otakudesu':
+            const otkdsEndpoint = $(this).data('endpoint');
+            $.getJSON(`/otakudesu/api/anime/detail/${otkdsEndpoint.replace('/anime/', '')}`, function (result) {
+                const data = result.data;
+
+                const filterEps = data.eps.filter(a => a.type == 'List')[0].data;
+                $('.modal-title').text(`${data.title}`);
+                $('.modal-body').html(`
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src="${data.thumb}" class="img-fluid" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <ul class="list-group">
+                                <li class="list-group-item"><b>Japanese:</b> ${data.japanese}</li>
+                                <li class="list-group-item"><b>Skor:</b> ⭐${data.skor}</li>
+                                <li class="list-group-item"><b>Producer:</b> ${data.producer}</li>
+                                <li class="list-group-item"><b>Type:</b> ${data.type}</li>
+                                <li class="list-group-item"><b>Genre:</b> ${data.genre}</li>
+                                <li class="list-group-item"><b>Status:</b> ${data.status}</li>
+                                <li class="list-group-item"><b>Episodes:</b> ${data.episodes}</li>
+                            </ul>
+                        </div>
+                    </div>
+                <hr>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p>${data.sinopsis.join('\n')}</p>
+                        </div>
+                    </div>
+
+                <hr>
+
+                    <div class="row">
+                        <div class="col-sm-12" style="overflow-y: scroll; height:400px;">
+                            <table class="table table-striped table-bordered table-paginate" cellspacing="0">
+                                <tbody>
+                                    ${generateEpsList(filterEps).join('\n')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                `);
+            });
+            break;
     }
 });
 
@@ -146,6 +200,20 @@ function generateChapterList(array) {
 
     return temp;
 };
+
+function generateEpsList(array) {
+    const temp = [];
+    array.forEach(function (a, i) {
+        temp.push(`
+            <tr>
+                <td>${a.title}</td>
+                <td><a href="/otakudesu/eps${a.endpoint}" target="_blank"><button type="button" class="btn btn-dark btn-sm btn-block">Nonton Anime</button></a></td>
+            </tr>
+        `);
+    });
+
+    return temp;
+}
 
 /* Add Favorite */
 $('.favorite').on('click', async function () {
@@ -250,4 +318,86 @@ $('#pagination').on('click', 'a', function () {
                 });
             });
     }
-})
+});
+
+/* Anime */
+$('#btn-eps-selected').on('click', function () {
+    const val = $('#eps-selected').val();
+    if (val === '0') return;
+    window.location.href = `/otakudesu/eps${val}`;
+});
+
+/*Mirror Eps*/
+$('.dropdown-item').on('click', function () {
+    const endpoint = window.location.href.split('/')[5];
+    const mirror = $(this).data('query');
+
+    $.getJSON(`/otakudesu/api/anime/eps/${endpoint}${mirror}`, function (result) {
+        const stream_link = result.data.stream_link;
+
+        $('#my-video').length === 0 ? true : videojs('my-video').dispose();
+
+        switch (true) {
+            case stream_link.includes('.html'):
+                $('#video-player').html('');
+
+                $('#video-player').append(`
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="${stream_link}" allowfullscreen></iframe>
+                    </div>
+                `);
+
+                break;
+            case stream_link.includes('mp4upload'):
+                $('#video-player').html('');
+
+                $('#video-player').append(`
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="${stream_link}" allowfullscreen></iframe>
+                    </div>
+                `);
+                break;
+
+            case stream_link.includes('gdriveplayer'):
+                $('#video-player').html('');
+
+                $('#video-player').append(`
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="${stream_link}" allowfullscreen></iframe>
+                    </div>
+                `);
+                break;
+
+            case stream_link.includes('yourupload'):
+                $('#video-player').html('');
+
+                $('#video-player').append(`
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="${stream_link}" allowfullscreen></iframe>
+                    </div>
+                `);
+                break;
+
+            case stream_link.includes('mega'):
+                $('#video-player').html('');
+
+                $('#video-player').append(`
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="${stream_link}" allowfullscreen></iframe>
+                    </div>
+                `);
+                break;
+            default:
+                $('#video-player').html('');
+
+                $('#video-player').append(`
+                    <video id="my-video" class="video-js mx-auto" controls preload="auto" width="800" height="400" poster="https://cdn.discordapp.com/emojis/746208811848695849.png">
+                        <source src="${stream_link}" type="video/mp4" />
+                    </video>
+                `);
+
+                videojs('my-video');
+                break;
+        }
+    });
+});

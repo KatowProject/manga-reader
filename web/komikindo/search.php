@@ -13,7 +13,7 @@
         'username' => $_COOKIE['username'],
         'type' => 'list'
     ]);
-    $response_fav = getList($body_array);   
+    $response_fav = getList($body_array);
 
     if ($len > 0) { ?>
     <div class="row" id="manga-list">
