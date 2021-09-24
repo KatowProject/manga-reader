@@ -63,7 +63,6 @@ $('#mangas').on('click', '.see-detail', function () {
                             <p>${data.sinopsis}</p>
                         </div>
                     </div>
-
                     <hr>
 
                     <div class="row">
@@ -134,7 +133,7 @@ $('#mangas').on('click', '.see-detail', function () {
 
         case 'otakudesu':
             const otkdsEndpoint = $(this).data('endpoint');
-            $.getJSON(`/otakudesu/api/anime/detail/${otkdsEndpoint.replace('/anime/', '')}`, function (result) {
+            $.getJSON(`/otakudesu/api/anime/detail/${otkdsEndpoint.replace('/anime/', '')}`, async function (result) {
                 const data = result.data;
 
                 const filterEps = data.eps.filter(a => a.type == 'List')[0].data;
@@ -158,15 +157,22 @@ $('#mangas').on('click', '.see-detail', function () {
                         </div>
                     </div>
                 <hr>
-
                     <div class="row">
                         <div class="col-sm-12">
                             <p>${data.sinopsis.join('\n')}</p>
                         </div>
                     </div>
-
                 <hr>
-
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table class="table table-striped table-bordered" cellspacing="0">
+                                <tbody>
+                                    tr
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <hr>
                     <div class="row">
                         <div class="col-sm-12" style="overflow-y: scroll; height:400px;">
                             <table class="table table-striped table-bordered table-paginate" cellspacing="0">

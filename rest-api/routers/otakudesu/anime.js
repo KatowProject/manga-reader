@@ -80,7 +80,30 @@ router.get('/detail/:endpoint', async (req, res) => {
 router.get('/batch/:endpoint', async (req, res) => {
     try {
         const endpoint = req.params.endpoint;
-        const url = `${mainUrl}${endpoint}`;
+        const url = `${mainUrl}/batch/${endpoint}`;
+
+        const response = await axios.get(url);
+        const $ = cheerio.load(response.data);
+        const main = $('.download');
+
+        const obj = {};
+        obj.title = $(main).find('.batchlink > h4').text();
+        obj.download_link = [];
+        $(main).find('.batchlink ul li').each((i, a) => {
+            const temp = [];
+            $(a).find('a').each((j, b) => {
+                temp.push({
+                    name: $(b).text(),
+                    url: $(b).attr('href'),
+                });
+            });
+            obj.download_link.push({
+                name: $(a).find(`strong`).text(),
+                data: temp
+            });
+        });
+
+        res.send({ success: true, data: obj });
     } catch (err) {
         console.log(err);
         res.status(500).send({ success: false, error: err.message });
@@ -93,10 +116,7 @@ router.get('/eps/:endpoint', async (req, res) => {
         const query = req.query;
 
         const mirror = Object.keys(query);
-        if (mirror.includes('mirror')) console
         const url = `${mainUrl}/${endpoint}?${mirror[0]}=${query[mirror[0]]}`;
-        console.log(url);
-
         const response = await axios.get(url);
         const $ = cheerio.load(response.data);
         const main = $('#venkonten');

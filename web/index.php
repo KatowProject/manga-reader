@@ -68,6 +68,13 @@
             <p><a class="btn btn-secondary" href="/mangabat">View details &raquo;</a></p>
         </div><!-- /.col-lg-4 -->
 
+        <div class="col-lg-4">
+          <img class="bd-placeholder-img rounded-circle" src="https://pm1.narvii.com/6461/0153e7e0a295c5afb6b6acfe2a876e461e10a0ec_hq.jpg" width="140" height="140">
+            <h2>Otakudesu</h2>
+            <p>Nonton Anime di Source Otakudesu</p>
+            <p><a class="btn btn-secondary" href="/otakudesu">View details &raquo;</a></p>
+        </div><!-- /.col-lg-4 -->
+
       <hr class="featurette-divider">
     </div><!-- /.container -->
 
