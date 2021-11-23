@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { axios } = require('../../tools');
 const cheerio = require('cheerio');
-const baseURL = 'https://otakudesu.moe';
+const baseURL = 'https://otakudesu.vip';
 
 router.get('/', async (req, res) => {
     try {

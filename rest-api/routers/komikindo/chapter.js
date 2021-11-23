@@ -16,7 +16,8 @@ router.get('/:query', async (req, res) => {
         data.chapter_images = [];
         $(main).find('img').each((i, e) => {
             const image = $(e).attr('src');
-            data.chapter_images.push(image);
+            const img = image.replace("img.statically.io/img/bacakomik/", "")
+            data.chapter_images.push(`https://cdn.iqbalrifai.eu.org/iu/?url=${img}`);
         });
         data.chapter_length = data.chapter_images.length;
 
@@ -34,6 +35,5 @@ router.get('/:query', async (req, res) => {
     } catch (error) {
         res.send({ success: false, error: error.message });
     }
-
 });
 module.exports = router;

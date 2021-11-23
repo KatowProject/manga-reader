@@ -18,7 +18,7 @@ module.exports = {
         get: (url, option = {}) => {
             return new Promise(async (resolve, reject) => {
                 try {
-                    const res = await axios.get(url);
+                    const res = await axios.get(url, option);
                     if (res.status === 200) return resolve(res);
                     else reject(res);
                 } catch (err) {

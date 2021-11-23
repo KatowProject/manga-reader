@@ -14,6 +14,7 @@
         integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" 
         integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous"/>
+    <link rel="icon" href="/assets/image/kato.png"/>
         
     <!-- Custom styles for this template -->
     <link href="/assets/css/carousel.css" rel="stylesheet">
@@ -23,7 +24,7 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
             <a class="navbar-brand" href="/">
-                <img src="https://cdn.discordapp.com/emojis/750342786825584811.png" width="30" height="30"
+                <img src="/assets/image/kato.png" width="30" height="30"
                     class="d-inline-block align-top" alt="">Komikato</a>
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                   aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,21 +56,21 @@
       <!-- Three columns of text below the carousel -->
       <div class="row">
         <div class="col-lg-4">
-          <img class="bd-placeholder-img rounded-circle" width="140" height="140" src="https://gambar.club/uploads/2020/12/fav.png">
+          <img class="bd-placeholder-img rounded-circle" width="140" height="140" src="/assets/image/komikindo.png">
             <h2>Komikindo</h2>
             <p>Baca Komik di Source Komikindo.</p>
             <p><a class="btn btn-secondary" href="/komikindo">View details &raquo;</a></p>
         </div><!-- /.col-lg-4 -->
 
         <div class="col-lg-4">
-          <img class="bd-placeholder-img rounded-circle" src="https://m.mangabat.com/favicon-96x96.png" width="140" height="140">
+          <img class="bd-placeholder-img rounded-circle" src="/assets/image/mangabat.png" width="140" height="140">
             <h2>Mangabat</h2>
             <p>Baca Manga di Source Mangabat</p>
             <p><a class="btn btn-secondary" href="/mangabat">View details &raquo;</a></p>
         </div><!-- /.col-lg-4 -->
 
         <div class="col-lg-4">
-          <img class="bd-placeholder-img rounded-circle" src="https://pm1.narvii.com/6461/0153e7e0a295c5afb6b6acfe2a876e461e10a0ec_hq.jpg" width="140" height="140">
+          <img class="bd-placeholder-img rounded-circle" src="/assets/image/otakudesu.png" width="140" height="140">
             <h2>Otakudesu</h2>
             <p>Nonton Anime di Source Otakudesu</p>
             <p><a class="btn btn-secondary" href="/otakudesu">View details &raquo;</a></p>

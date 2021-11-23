@@ -1,8 +1,5 @@
 <?php
-    session_name('session');
-    session_start();
-    
-    if (!isset($_SESSION['user_id']) or !isset($_COOKIE['user_id'])) {
+    if (!isset($_COOKIE['user_id'])) {
        header('location: /login');
     };
     define('BASEPATH', dirname(__FILE__)); 

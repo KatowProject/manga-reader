@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const cheerio = require('cheerio');
 const { axios, getVideoSrc } = require('../../tools');
-const mainUrl = 'https://otakudesu.moe';
+const mainUrl = 'https://otakudesu.vip';
 
 router.get('/detail/:endpoint', async (req, res) => {
     try {

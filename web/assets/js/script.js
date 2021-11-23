@@ -164,16 +164,6 @@ $('#mangas').on('click', '.see-detail', function () {
                     </div>
                 <hr>
                     <div class="row">
-                        <div class="col-sm-12">
-                            <table class="table table-striped table-bordered" cellspacing="0">
-                                <tbody>
-                                    tr
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                <hr>
-                    <div class="row">
                         <div class="col-sm-12" style="overflow-y: scroll; height:400px;">
                             <table class="table table-striped table-bordered table-paginate" cellspacing="0">
                                 <tbody>
