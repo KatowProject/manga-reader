@@ -14,10 +14,13 @@ router.get('/:query', async (req, res) => {
         data.chapter_endpoint = `${req.params.query}/`;
 
         data.chapter_images = [];
-        $(main).find('img').each((i, e) => {
-            const image = $(e).attr('src');
-            const img = image.replace("img.statically.io", "cdn.statically.io");
-            data.chapter_images.push(img);
+        const chapter_image_url = $(`link[rel="alternate"][type="application/json"]`).attr('href');
+        const getImages = await axios.get(chapter_image_url);
+        const $imgs = cheerio.load(getImages.data.content.rendered);
+        $imgs('img').each((i, el) => {
+            const src = $imgs(el).attr('src');
+            const url = src.replace('https://', "https://cdn.statically.io/img/")
+            data.chapter_images.push(url);
         });
         data.chapter_length = data.chapter_images.length;
 
